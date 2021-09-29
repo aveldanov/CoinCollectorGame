@@ -18,7 +18,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     var scoreLabel: SKLabelNode?
     
     // total can creat 32 categories when use UInt32
-    
     /*
      The category on SpriteKit is just a single 32-bit integer, acting as a bitmask. This is a fancy way of saying each of the 32-bits in the integer represents a single category (and hence you can have 32 categories max)
      */
@@ -41,7 +40,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         coinMan?.physicsBody?.contactTestBitMask = coinCategory | bombCategory
         // to avoid actual collisions ( move coinMan off the screen)
         coinMan?.physicsBody?.collisionBitMask = groundAndCeilCategory // coinMan to collide with ground and ceiling
-        
         
         ground = childNode(withName: "ground") as? SKSpriteNode
         ground?.physicsBody?.categoryBitMask = groundAndCeilCategory

@@ -14,6 +14,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     var coinTimer: Timer?
     var ground: SKSpriteNode?
     var ceil: SKSpriteNode?
+    var scoreLabel: SKLabelNode?
     
     // total can creat 32 categories when use UInt32
     
@@ -49,6 +50,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         ceil?.physicsBody?.categoryBitMask = groundAndCeilCategory
         ceil?.physicsBody?.collisionBitMask = coinManCategory
 
+        scoreLabel = childNode(withName: "scoreLabel") as? SKLabelNode
+        scoreLabel?.position = CGPoint(x: -size.width/2+80, y: size.height/2 - 80)
         
         coinTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { timer in
             self.createCoin()
@@ -98,6 +101,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     func didBegin(_ contact: SKPhysicsContact) {
         
         score += 1
+        scoreLabel?.text = "Score: \(score)"
         
         // Checking for both bodies as we do not know which one is coin
         if contact.bodyA.categoryBitMask == coinCategory{

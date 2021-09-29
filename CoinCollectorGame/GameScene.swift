@@ -25,6 +25,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     let bombCategory: UInt32 = 0x1 << 3
     let groundAndCeilCategory: UInt32 = 0x1 << 4
     
+    var score = 0
+    
     override func didMove(to view: SKView) {
         //create physicsWorld
         physicsWorld.contactDelegate = self
@@ -33,7 +35,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         
         //assign category to coinMan
         coinMan?.physicsBody?.categoryBitMask = coinManCategory
-        //assign coinMan to collide with
+        //assign coinMan to CONTACT! with
         coinMan?.physicsBody?.contactTestBitMask = coinCategory | bombCategory
         // to avoid actual collisions ( move coinMan off the screen)
         coinMan?.physicsBody?.collisionBitMask = groundAndCeilCategory // coinMan to collide with ground and ceiling
@@ -69,6 +71,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         coin.physicsBody?.affectedByGravity = false
         coin.physicsBody?.categoryBitMask = coinCategory
         coin.physicsBody?.contactTestBitMask = coinManCategory
+        coin.physicsBody?.collisionBitMask = 0
         addChild(coin)
         
         // height 1334 width 750
@@ -93,7 +96,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     
     
     func didBegin(_ contact: SKPhysicsContact) {
-        print("Collision")
+        
+        score += 1
+        
+        // Checking for both bodies as we do not know which one is coin
+        if contact.bodyA.categoryBitMask == coinCategory{
+            contact.bodyA.node?.removeFromParent()
+        }
+        if contact.bodyB.categoryBitMask == coinCategory{
+            contact.bodyB.node?.removeFromParent()
+        }
     }
 
 }

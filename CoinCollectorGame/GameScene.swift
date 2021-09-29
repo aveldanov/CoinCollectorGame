@@ -12,6 +12,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     
     var coinMan: SKSpriteNode?
     var coinTimer: Timer?
+    var bombTimer: Timer?
     var ground: SKSpriteNode?
     var ceil: SKSpriteNode?
     var scoreLabel: SKLabelNode?
@@ -56,6 +57,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         coinTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { timer in
             self.createCoin()
         })
+        
+        bombTimer = Timer.scheduledTimer(withTimeInterval: 2, repeats: true, block: { timer in
+            self.createBomb()
+        })
     }
     
     
@@ -64,8 +69,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         //apply force to the object
         coinMan?.physicsBody?.applyForce(CGVector(dx: 0, dy: 100_000))
     }
-    
-    
+
     func createCoin(){
         let coin = SKSpriteNode(imageNamed: "coin")
         // by default coin has no physics body so we have to create it
@@ -95,6 +99,40 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         //apply action
         coin.run(SKAction.sequence([moveLeft,SKAction.removeFromParent()]))
     }
+    
+    
+    func createBomb(){
+        let bomb = SKSpriteNode(imageNamed: "bomb")
+        // by default coin has no physics body so we have to create it
+        
+        bomb.physicsBody = SKPhysicsBody(rectangleOf: bomb.size)
+        bomb.physicsBody?.affectedByGravity = false
+        bomb.physicsBody?.categoryBitMask = bombCategory
+        bomb.physicsBody?.contactTestBitMask = coinManCategory
+        bomb.physicsBody?.collisionBitMask = 0
+        addChild(bomb)
+        
+        // height 1334 width 750
+        let maxY = size.height/2 - bomb.size.height/2
+        let minY = -size.height/2 + bomb.size.height/2
+        
+        let range = maxY-minY
+        let bombY = maxY - CGFloat(arc4random_uniform(UInt32(range)))
+        
+
+        bomb.position = CGPoint(x: size.width/2, y: bombY)
+
+        //create aciton
+        let moveLeft = SKAction.moveBy(x: -size.width, y: 0, duration: 4)
+        
+        // Sequence of actions in array
+        SKAction.sequence([moveLeft,SKAction.removeFromParent()])
+        //apply action
+        bomb.run(SKAction.sequence([moveLeft,SKAction.removeFromParent()]))
+        
+        
+    }
+    
     
     
     

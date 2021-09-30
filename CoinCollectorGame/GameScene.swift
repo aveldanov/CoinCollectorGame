@@ -43,6 +43,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         // to avoid actual collisions ( move coinMan off the screen)
         coinMan?.physicsBody?.collisionBitMask = groundAndCeilCategory // coinMan to collide with ground and ceiling
         
+        // CoinMan Animation
+        var coinManRun: [SKTexture] = []
+        for num in 0...43{
+            coinManRun.append(SKTexture(imageNamed: "run_0\(num)"))
+        }
+        
+        
         ground = childNode(withName: "ground") as? SKSpriteNode
         ground?.physicsBody?.categoryBitMask = groundAndCeilCategory
         ground?.physicsBody?.collisionBitMask = coinManCategory
@@ -229,10 +236,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         playButton.zPosition = 1
         addChild(playButton)
         
-        
         coinTimer?.invalidate()
         bombTimer?.invalidate()
-        
     }
     
     func scoreUp(){

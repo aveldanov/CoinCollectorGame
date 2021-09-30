@@ -16,6 +16,8 @@
 		21AAA4CE2704167C00DE623A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 21AAA4CD2704167C00DE623A /* Assets.xcassets */; };
 		21AAA4D12704167C00DE623A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 21AAA4CF2704167C00DE623A /* LaunchScreen.storyboard */; };
 		21AAA4D827059F7100DE623A /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 21AAA4D727059F7100DE623A /* README.md */; };
+		21AAA4DC2705A15D00DE623A /* CoinCollectorImage2.png in Resources */ = {isa = PBXBuildFile; fileRef = 21AAA4DA2705A15D00DE623A /* CoinCollectorImage2.png */; };
+		21AAA4DD2705A15D00DE623A /* CoinCollectorImage1.png in Resources */ = {isa = PBXBuildFile; fileRef = 21AAA4DB2705A15D00DE623A /* CoinCollectorImage1.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +31,8 @@
 		21AAA4CD2704167C00DE623A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		21AAA4D02704167C00DE623A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		21AAA4D727059F7100DE623A /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		21AAA4DA2705A15D00DE623A /* CoinCollectorImage2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CoinCollectorImage2.png; sourceTree = "<group>"; };
+		21AAA4DB2705A15D00DE623A /* CoinCollectorImage1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CoinCollectorImage1.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,6 +49,7 @@
 		21AAA4B42704167900DE623A = {
 			isa = PBXGroup;
 			children = (
+				21AAA4D92705A0FB00DE623A /* Images */,
 				21AAA4D727059F7100DE623A /* README.md */,
 				21AAA4BF2704167900DE623A /* CoinCollectorGame */,
 				21AAA4BE2704167900DE623A /* Products */,
@@ -72,6 +77,15 @@
 				21AAA4CF2704167C00DE623A /* LaunchScreen.storyboard */,
 			);
 			path = CoinCollectorGame;
+			sourceTree = "<group>";
+		};
+		21AAA4D92705A0FB00DE623A /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				21AAA4DB2705A15D00DE623A /* CoinCollectorImage1.png */,
+				21AAA4DA2705A15D00DE623A /* CoinCollectorImage2.png */,
+			);
+			path = Images;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -132,11 +146,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				21AAA4DC2705A15D00DE623A /* CoinCollectorImage2.png in Resources */,
 				21AAA4D827059F7100DE623A /* README.md in Resources */,
 				21AAA4CC2704167900DE623A /* Main.storyboard in Resources */,
 				21AAA4C32704167900DE623A /* GameScene.sks in Resources */,
 				21AAA4CE2704167C00DE623A /* Assets.xcassets in Resources */,
 				21AAA4D12704167C00DE623A /* LaunchScreen.storyboard in Resources */,
+				21AAA4DD2705A15D00DE623A /* CoinCollectorImage1.png in Resources */,
 				21AAA4C52704167900DE623A /* Actions.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

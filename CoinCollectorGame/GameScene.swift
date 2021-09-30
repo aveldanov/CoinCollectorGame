@@ -13,6 +13,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     var coinMan: SKSpriteNode?
     var coinTimer: Timer?
     var bombTimer: Timer?
+    var cloudTimer: Timer?
 //    var ground: SKSpriteNode?
     var ceil: SKSpriteNode?
     var scoreLabel: SKLabelNode?
@@ -75,6 +76,41 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         createGrass()
     }
     
+    func createCloud(){
+        let cloud = SKSpriteNode(imageNamed: "cloud")
+        // by default coin has no physics body so we have to create it
+        
+//        cloud.physicsBody = SKPhysicsBody(rectangleOf: cloud.size)
+//        cloud.physicsBody?.affectedByGravity = false
+//        cloud.physicsBody?.categoryBitMask = coinCategory
+//        cloud.physicsBody?.contactTestBitMask = coinManCategory
+//        cloud.physicsBody?.collisionBitMask = 0
+        
+        cloud.zPosition = -1
+        addChild(cloud)
+        
+        // height 1334 width 750
+        let maxY = size.height/2 - cloud.size.height/2
+        let minY = cloud.size.height/2
+        
+        let range = maxY-minY
+        let cloudY = maxY - CGFloat(arc4random_uniform(UInt32(range)))
+        
+
+        cloud.position = CGPoint(x: size.width/2+cloud.size.width+20, y: cloudY)
+
+        //create aciton
+        let moveLeft = SKAction.moveBy(x: -size.width-cloud.size.width-120, y: 0, duration: 10)
+        
+        // Sequence of actions in array
+        SKAction.sequence([moveLeft, SKAction.removeFromParent()])
+        //apply action
+        cloud.run(SKAction.sequence([moveLeft,SKAction.removeFromParent()]))
+
+    }
+    
+    
+    
     
     func createGrass(){
         let sizingGrass = SKSpriteNode(imageNamed: "grass")
@@ -97,11 +133,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             grass.position = CGPoint(x: grassX, y: -size.height/2+grass.size.height/2-15)
             
             
-            // adding speed for the grass to have the same speed no matter the location on the view...as it goes different time for the entire screen vs from left side to deepleft
-            let speed = 100
-            let moveLeft = SKAction.moveBy(x: -grass.size.width-grass.size.width*CGFloat(num), y: 0, duration: TimeInterval((grass.size.width+grass.size.width*CGFloat(num))/Double(speed)) )
+            // adding 'speed' for the grass to have the same speed no matter the location on the view...as it goes different time for the entire screen vs from left side to deepleft
+            let speed = 100.0
+            let firstMoveLeft = SKAction.moveBy(x: -grass.size.width-grass.size.width*CGFloat(num), y: 0, duration: TimeInterval((grass.size.width+grass.size.width*CGFloat(num))/speed) )
             
-            grass.run(moveLeft)
+            
+            let resetGrass = SKAction.moveBy(x: size.width+grass.size.width, y: 0, duration: 0)
+            
+            let grassFullMove = SKAction.moveBy(x: -size.width-grass.size.width, y: 0, duration: TimeInterval((size.width+grass.size.width)/speed))
+                                                
+            let grassMovingForever = SKAction.repeatForever(SKAction.sequence([grassFullMove, resetGrass]))
+                                                
+            grass.run(SKAction.sequence([firstMoveLeft, resetGrass, grassMovingForever]))
         }
         
         
@@ -115,6 +158,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         bombTimer = Timer.scheduledTimer(withTimeInterval: 2, repeats: true, block: { timer in
             self.createBomb()
         })
+        
+        cloudTimer = Timer.scheduledTimer(withTimeInterval: 6, repeats: true, block: { timer in
+            self.createCloud()
+        })
+        
         
     }
     
@@ -258,7 +306,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         yourScoreLabel.zPosition = 1 // default is 0 (back)
         yourScoreLabel.position = CGPoint(x: 0, y: 200)
         yourScoreLabel.fontSize = 100
-        
+        yourScoreLabel.fontName = "AvenirNext-Bold"
+        yourScoreLabel.fontColor = .lightGray
         
         finalScoreLabel = SKLabelNode(text: "\(score)")
         guard let finalScoreLabel = finalScoreLabel else {
@@ -268,6 +317,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         finalScoreLabel.zPosition = 1
         finalScoreLabel.position = CGPoint(x: 0, y: 0)
         finalScoreLabel.fontSize = 200
+        finalScoreLabel.fontName = "AvenirNext-Bold"
+        finalScoreLabel.fontColor = .lightGray
+        
         
         let playButton = SKSpriteNode(imageNamed: "play")
         playButton.position = CGPoint(x: 0, y: -200)
@@ -277,6 +329,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         
         coinTimer?.invalidate()
         bombTimer?.invalidate()
+        cloudTimer?.invalidate()
     }
     
     func scoreUp(){

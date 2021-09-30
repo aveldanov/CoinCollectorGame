@@ -89,6 +89,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             grass.physicsBody?.affectedByGravity = false
             grass.physicsBody?.isDynamic = false //so it won't bounce back
             addChild(grass)
+            
+            let grassX = -size.width/2 + grass.size.width/2
+            
+            grass.position = CGPoint(x: <#T##Int#>, y: <#T##Int#>)
         }
         
         

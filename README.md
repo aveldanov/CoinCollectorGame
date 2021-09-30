@@ -1,7 +1,7 @@
 
 <p float="left">
 <img src="Images/CoinCollectorImage1.png" alt="drawing" width="200"/>
-<&nbsp>
+&nbsp
 <img src="Images/CoinCollectorImage2.png" alt="drawing" width="200"/>
 </p>
 

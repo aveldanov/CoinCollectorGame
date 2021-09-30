@@ -12,6 +12,6 @@
 </p>
 
 
-### Easy fun game to collect (bit)coins and avoid bombs
+### Easy fun game to collect (bit)coins and dodge bombs
 ### Enjoy!
 

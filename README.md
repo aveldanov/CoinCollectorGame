@@ -1,4 +1,4 @@
-![](Images/CoinCollectorImage1.png)
+![](Images/CoinCollectorImage1.png =250x)
 
 
 # Coin Collectior Game

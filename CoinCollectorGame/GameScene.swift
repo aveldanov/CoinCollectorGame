@@ -13,7 +13,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     var coinMan: SKSpriteNode?
     var coinTimer: Timer?
     var bombTimer: Timer?
-    var ground: SKSpriteNode?
+//    var ground: SKSpriteNode?
     var ceil: SKSpriteNode?
     var scoreLabel: SKLabelNode?
     var yourScoreLabel: SKLabelNode?
@@ -45,14 +45,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         
         // CoinMan Animation
         var coinManRun: [SKTexture] = []
-        for num in 0...43{
-            coinManRun.append(SKTexture(imageNamed: "run_0\(num)"))
+        for num in 0..<43{
+            if num >= 0 && num <= 9{
+                coinManRun.append(SKTexture(imageNamed: "run_00\(num)"))
+            }else{
+                coinManRun.append(SKTexture(imageNamed: "run_0\(num)"))
+            }
+            
         }
+        // Animation
+        let animation = SKAction.animate(with: coinManRun, timePerFrame: 0.015)
+        let animationAction = SKAction.repeatForever(animation)
+        coinMan?.run(animationAction)
         
         
-        ground = childNode(withName: "ground") as? SKSpriteNode
-        ground?.physicsBody?.categoryBitMask = groundAndCeilCategory
-        ground?.physicsBody?.collisionBitMask = coinManCategory
+//        ground = childNode(withName: "ground") as? SKSpriteNode
+//        ground?.physicsBody?.categoryBitMask = groundAndCeilCategory
+//        ground?.physicsBody?.collisionBitMask = coinManCategory
         
         ceil = childNode(withName: "ground") as? SKSpriteNode
         ceil?.physicsBody?.categoryBitMask = groundAndCeilCategory
@@ -63,9 +72,27 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         
 
         startTimers()
+        createGrass()
     }
     
     
+    func createGrass(){
+        let sizingGrass = SKSpriteNode(imageNamed: "grass")
+        let numberOfGrass = Int(size.width/sizingGrass.size.width) + 1
+        
+        for num in 0...numberOfGrass{
+            let grass = SKSpriteNode(imageNamed: "grass")
+
+            grass.physicsBody = SKPhysicsBody(rectangleOf: grass.size)
+            grass.physicsBody?.categoryBitMask = groundAndCeilCategory
+            grass.physicsBody?.collisionBitMask = coinManCategory
+            grass.physicsBody?.affectedByGravity = false
+            grass.physicsBody?.isDynamic = false //so it won't bounce back
+            addChild(grass)
+        }
+        
+        
+    }
     
     func startTimers(){
         coinTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { timer in
@@ -228,7 +255,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         finalScoreLabel.zPosition = 1
         finalScoreLabel.position = CGPoint(x: 0, y: 0)
         finalScoreLabel.fontSize = 200
-        
         
         let playButton = SKSpriteNode(imageNamed: "play")
         playButton.position = CGPoint(x: 0, y: -200)

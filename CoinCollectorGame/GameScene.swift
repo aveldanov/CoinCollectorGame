@@ -83,16 +83,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         for num in 0...numberOfGrass{
             let grass = SKSpriteNode(imageNamed: "grass")
 
-            grass.physicsBody = SKPhysicsBody(rectangleOf: grass.size)
+//            grass.physicsBody = SKPhysicsBody(rectangleOf: grass.size)
+            grass.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: grass.size.width, height: grass.size.height-80))
+            
             grass.physicsBody?.categoryBitMask = groundAndCeilCategory
             grass.physicsBody?.collisionBitMask = coinManCategory
             grass.physicsBody?.affectedByGravity = false
             grass.physicsBody?.isDynamic = false //so it won't bounce back
             addChild(grass)
             
-            let grassX = -size.width/2 + grass.size.width/2
+            let grassX = -size.width/2 + grass.size.width/2 + grass.size.width*CGFloat(num)
             
-            grass.position = CGPoint(x: <#T##Int#>, y: <#T##Int#>)
+            grass.position = CGPoint(x: grassX, y: -size.height/2+grass.size.height/2-15)
+            
+            
+            // adding speed for the grass to have the same speed no matter the location on the view...as it goes different time for the entire screen vs from left side to deepleft
+            let speed = 100
+            let moveLeft = SKAction.moveBy(x: -grass.size.width-grass.size.width*CGFloat(num), y: 0, duration: TimeInterval((grass.size.width+grass.size.width*CGFloat(num))/Double(speed)) )
+            
+            grass.run(moveLeft)
         }
         
         

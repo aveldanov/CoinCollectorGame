@@ -1,4 +1,4 @@
-![](Images/CoinCollector1.png)
+![](Images/CoinCollectorImage1.png)
 
 
 # Coin Collectior Game

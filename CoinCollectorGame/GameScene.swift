@@ -16,6 +16,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     var ground: SKSpriteNode?
     var ceil: SKSpriteNode?
     var scoreLabel: SKLabelNode?
+    var yourScoreLabel: SKLabelNode?
+    var finalScoreLabel: SKLabelNode?
     
     // total can creat 32 categories when use UInt32
     /*
@@ -52,6 +54,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         scoreLabel = childNode(withName: "scoreLabel") as? SKLabelNode
         scoreLabel?.position = CGPoint(x: -size.width/2+80, y: size.height/2 - 80)
         
+
+        startTimers()
+    }
+    
+    
+    
+    func startTimers(){
         coinTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { timer in
             self.createCoin()
         })
@@ -59,13 +68,44 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         bombTimer = Timer.scheduledTimer(withTimeInterval: 2, repeats: true, block: { timer in
             self.createBomb()
         })
+        
     }
+    
     
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
   
-        //apply force to the object
-        coinMan?.physicsBody?.applyForce(CGVector(dx: 0, dy: 100_000))
+        if scene?.isPaused == false {
+            //apply force to the object
+            coinMan?.physicsBody?.applyForce(CGVector(dx: 0, dy: 100_000))
+        }
+        
+
+        
+        
+        
+        
+        // RESTART Button actions
+        let touch = touches.first
+        // self -> touches inside of the scene
+        if let location = touch?.location(in: self){
+            let nodesPicked = nodes(at: location)
+            
+            for node in nodesPicked{
+                // touched the game button
+                if node.name == "play"{
+                    // Restard Game
+                    score = 0
+                    node.removeFromParent() // removed Play button
+                    finalScoreLabel?.removeFromParent()
+                    yourScoreLabel?.removeFromParent()
+                    scene?.isPaused = false
+                    scoreLabel?.text = "Score: \(score)"
+                    startTimers()
+                }
+                
+            }
+        }
     }
 
     func createCoin(){
@@ -93,7 +133,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         let moveLeft = SKAction.moveBy(x: -size.width, y: 0, duration: 4)
         
         // Sequence of actions in array
-        SKAction.sequence([moveLeft,SKAction.removeFromParent()])
+        SKAction.sequence([moveLeft, SKAction.removeFromParent()])
         //apply action
         coin.run(SKAction.sequence([moveLeft,SKAction.removeFromParent()]))
     }
@@ -126,26 +166,78 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         // Sequence of actions in array
         SKAction.sequence([moveLeft,SKAction.removeFromParent()])
         //apply action
-        bomb.run(SKAction.sequence([moveLeft,SKAction.removeFromParent()]))
+        bomb.run(SKAction.sequence ([moveLeft,SKAction.removeFromParent()]))
         
         
     }
-    
-    
+
     
     
     func didBegin(_ contact: SKPhysicsContact) {
         
-        score += 1
-        scoreLabel?.text = "Score: \(score)"
+
         
         // Checking for both bodies as we do not know which one is coin
         if contact.bodyA.categoryBitMask == coinCategory{
             contact.bodyA.node?.removeFromParent()
+            scoreUp()
         }
         if contact.bodyB.categoryBitMask == coinCategory{
             contact.bodyB.node?.removeFromParent()
+            scoreUp()
         }
+        
+        if contact.bodyA.categoryBitMask == bombCategory{
+            print("Game OverA")
+            contact.bodyA.node?.removeFromParent()
+            gameOver()
+        }
+        
+        if contact.bodyB.categoryBitMask == bombCategory{
+            print("Game OverB")
+            contact.bodyB.node?.removeFromParent()
+            gameOver()
+        }
+    }
+    
+    func gameOver(){
+        
+        scene?.isPaused = true
+        yourScoreLabel = SKLabelNode(text: "Your Score:")
+        guard let yourScoreLabel = yourScoreLabel else{
+            return
+        }
+        addChild(yourScoreLabel)
+        yourScoreLabel.zPosition = 1 // default is 0 (back)
+        yourScoreLabel.position = CGPoint(x: 0, y: 200)
+        yourScoreLabel.fontSize = 100
+        
+        
+        finalScoreLabel = SKLabelNode(text: "\(score)")
+        guard let finalScoreLabel = finalScoreLabel else {
+            return
+        }
+        addChild(finalScoreLabel)
+        finalScoreLabel.zPosition = 1
+        finalScoreLabel.position = CGPoint(x: 0, y: 0)
+        finalScoreLabel.fontSize = 200
+        
+        
+        let playButton = SKSpriteNode(imageNamed: "play")
+        playButton.position = CGPoint(x: 0, y: -200)
+        playButton.name = "play"
+        playButton.zPosition = 1
+        addChild(playButton)
+        
+        
+        coinTimer?.invalidate()
+        bombTimer?.invalidate()
+        
+    }
+    
+    func scoreUp(){
+        score += 1
+        scoreLabel?.text = "Score: \(score)"
     }
 
 }
